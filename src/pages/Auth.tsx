@@ -81,7 +81,7 @@ const Auth = () => {
                   />
                 </div>
                 
-                <div className="flex items-center space-x-2">
+                {/* <div className="flex items-center space-x-2">
                   <Checkbox
                     id="admin"
                     checked={isAdmin}
@@ -90,7 +90,7 @@ const Auth = () => {
                   <Label htmlFor="admin" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                     Daftar sebagai Admin
                   </Label>
-                </div>
+                </div> */}
               </>
             )}
             
