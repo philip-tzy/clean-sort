@@ -9,6 +9,7 @@ import { useSound } from '@/hooks/useSound';
 import { useAuth } from '@/contexts/AuthContext';
 import { useBackgroundMusic } from '@/hooks/useBackgroundMusic';
 import MusicToggle from './MusicToggle';
+import { supabase } from '@/integrations/supabase/client';
 
 interface WelcomeScreenProps {
   onStartGame: (levelId: string) => void;
@@ -71,6 +72,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
   const { playBackgroundMusic } = useBackgroundMusic();
+  const [levelLocks, setLevelLocks] = React.useState<{[levelId: string]: boolean}>({});
 
   const handleStartGame = (levelId: string) => {
     playButtonClick();
@@ -79,7 +81,27 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
   React.useEffect(() => {
     playBackgroundMusic('/boba-date.mp3');
-    // eslint-disable-next-line
+    const fetchLocks = async () => {
+      const { data, error } = await supabase.from('level_locks').select('*');
+      if (!error && data) {
+        const locks: {[levelId: string]: boolean} = {};
+        data.forEach((row: any) => { locks[row.level_id] = row.locked; });
+        setLevelLocks(locks);
+      }
+    };
+    fetchLocks();
+
+    // Subscribe realtime ke perubahan level_locks
+    // @ts-expect-error: level_locks tidak ada di types, tapi tabel ada di database
+    const channel = supabase
+      .channel('public:level_locks')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'level_locks' }, () => {
+        fetchLocks();
+      })
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return <div className="min-h-screen bg-welcome-gradient flex items-center justify-center p-2 sm:p-4">
@@ -161,11 +183,12 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               }}>
                     {levels.map((level, idx) => {
                   const unlocked = isLevelUnlocked(idx, levels, levelStars);
+                  const isLockedByAdmin = levelLocks[level.id];
                   return <div key={level.id} className="relative min-w-[270px] max-w-[350px] sm:min-w-[320px] sm:max-w-[380px] flex-shrink-0">
                           <Card className={`transition-all duration-300 cursor-pointer border-4 ${diff.borderColor} relative select-none 
-                              ${unlocked ? "hover:scale-102 hover:shadow-md" : "opacity-60 grayscale cursor-not-allowed pointer-events-none"}
+                              ${unlocked && !isLockedByAdmin ? "hover:scale-102 hover:shadow-md" : "opacity-60 grayscale cursor-not-allowed pointer-events-none"}
                               rounded-xl p-1 sm:p-2
-                            `} onClick={() => unlocked && handleStartGame(level.id)} tabIndex={unlocked ? 0 : -1} aria-disabled={!unlocked}>
+                            `} onClick={() => unlocked && !isLockedByAdmin && handleStartGame(level.id)} tabIndex={unlocked && !isLockedByAdmin ? 0 : -1} aria-disabled={!unlocked || isLockedByAdmin}>
                             <CardHeader className="pb-2 sm:pb-3">
                               <div className="mb-1">
                                 {getLevelIcon(diff.key, idx)}
@@ -184,15 +207,18 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                                 size="lg"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  if (unlocked) handleStartGame(level.id);
+                                  if (unlocked && !isLockedByAdmin) handleStartGame(level.id);
                                 }}
+                                disabled={!unlocked || isLockedByAdmin}
                               >
                                 Mulai Bermain
                               </Button>
                             </CardContent>
-                            {!unlocked && <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center rounded-xl z-10">
+                            {(!unlocked || isLockedByAdmin) && <div className="absolute inset-0 bg-white/70 flex flex-col items-center justify-center rounded-xl z-10">
                                 <div className="text-3xl mb-2" aria-label="level terkunci">🔒</div>
-                                <span className="text-gray-600 text-xs sm:text-sm font-semibold text-center">Selesaikan level sebelumnya untuk membuka!</span>
+                                <span className="text-gray-600 text-xs sm:text-sm font-semibold text-center">
+                                  {isLockedByAdmin ? 'Level dikunci admin' : 'Selesaikan level sebelumnya untuk membuka!'}
+                                </span>
                               </div>}
                           </Card>
                         </div>;

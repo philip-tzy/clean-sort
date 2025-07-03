@@ -8,6 +8,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import MusicToggle from '@/components/MusicToggle';
+import { gameLevels } from '@/data/gameData';
+import { Database } from '@/integrations/supabase/types';
 
 interface UserProfile {
   id: string;
@@ -24,6 +26,8 @@ const Admin = () => {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [levelLocks, setLevelLocks] = useState<{[levelId: string]: boolean}>({});
+  const [lockLoading, setLockLoading] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user, isAdmin, signOut } = useAuth();
 
@@ -117,6 +121,43 @@ const Admin = () => {
       month: '2-digit',
       year: 'numeric'
     });
+  };
+
+  // Fetch level locks
+  useEffect(() => {
+    const fetchLocks = async () => {
+      const { data, error } = await supabase.from('level_locks').select('*');
+      if (!error && data) {
+        const locks: {[levelId: string]: boolean} = {};
+        data.forEach((row: any) => { locks[row.level_id] = row.locked; });
+        setLevelLocks(locks);
+      }
+    };
+    fetchLocks();
+
+    // Subscribe realtime ke perubahan level_locks
+    // @ts-expect-error: level_locks tidak ada di types, tapi tabel ada di database
+    const channel = supabase
+      .channel('public:level_locks')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'level_locks' }, () => {
+        fetchLocks();
+      })
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const toggleLock = async (levelId: string, locked: boolean) => {
+    setLockLoading(levelId);
+    const { error } = await supabase.from('level_locks').upsert({ level_id: levelId, locked: !locked });
+    if (!error) {
+      setLevelLocks(prev => ({ ...prev, [levelId]: !locked }));
+      toast.success(`Level ${!locked ? 'dikunci' : 'dibuka'}`);
+    } else {
+      toast.error('Gagal update status kunci level');
+    }
+    setLockLoading(null);
   };
 
   if (loading) {
@@ -264,6 +305,72 @@ const Admin = () => {
               ⚠️ <strong>Peringatan:</strong> Menghapus progress pengguna akan menghilangkan semua skor, pencapaian level, dan bintang mereka secara permanen. 
               Tindakan ini tidak dapat dibatalkan dan akan mengatur ulang progress mereka ke awal.
             </p>
+          </CardContent>
+        </Card>
+
+        {/* Level Locks Table */}
+        <Card className="mb-6 bg-white/90 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="text-xl">🔒 Pengunci Level</CardTitle>
+            <p className="text-sm text-gray-600">Admin dapat mengunci/membuka level agar user tidak bisa main sebelum dibuka</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button size="sm" variant="destructive" onClick={async () => {
+                setLockLoading('ALL');
+                const updates = gameLevels.map(lvl => ({ level_id: lvl.id, locked: true }));
+                // @ts-expect-error: level_locks tidak ada di types, tapi tabel ada di database
+                const { error } = await supabase.from('level_locks').upsert(updates);
+                if (!error) {
+                  setLevelLocks(Object.fromEntries(gameLevels.map(lvl => [lvl.id, true])));
+                  toast.success('Semua level berhasil dikunci');
+                } else {
+                  toast.error('Gagal mengunci semua level');
+                }
+                setLockLoading(null);
+              }} disabled={lockLoading==='ALL'}>
+                {lockLoading==='ALL' ? '...' : 'Kunci Semua Level'}
+              </Button>
+              <Button size="sm" variant="default" onClick={async () => {
+                setLockLoading('ALL_UNLOCK');
+                const updates = gameLevels.map(lvl => ({ level_id: lvl.id, locked: false }));
+                // @ts-expect-error: level_locks tidak ada di types, tapi tabel ada di database
+                const { error } = await supabase.from('level_locks').upsert(updates);
+                if (!error) {
+                  setLevelLocks(Object.fromEntries(gameLevels.map(lvl => [lvl.id, false])));
+                  toast.success('Semua level berhasil dibuka');
+                } else {
+                  toast.error('Gagal membuka semua level');
+                }
+                setLockLoading(null);
+              }} disabled={lockLoading==='ALL_UNLOCK'}>
+                {lockLoading==='ALL_UNLOCK' ? '...' : 'Buka Semua Level'}
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Level</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Aksi</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {gameLevels.map(level => (
+                    <TableRow key={level.id}>
+                      <TableCell>{level.name} <span className="text-xs text-gray-400">({level.id})</span></TableCell>
+                      <TableCell>{levelLocks[level.id] ? <span className="text-red-600 font-bold">Terkunci</span> : <span className="text-green-600 font-bold">Terbuka</span>}</TableCell>
+                      <TableCell>
+                        <Button size="sm" variant={levelLocks[level.id] ? 'default' : 'destructive'} disabled={lockLoading===level.id} onClick={() => toggleLock(level.id, !!levelLocks[level.id])}>
+                          {lockLoading===level.id ? '...' : (levelLocks[level.id] ? 'Buka' : 'Kunci')}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       </div>
