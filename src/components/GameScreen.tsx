@@ -29,18 +29,9 @@ const GameScreen: React.FC<GameScreenProps> = ({ levelId, onGameEnd, onBackToMen
   let numItems: number;
   let effectiveItems: TrashItemType[] = [];
 
-  if (levelIdx % 2 === 0) {
-    // Level ganjil (idx genap → Level 1/3/5/7/...)
-    numItems = 3 + Math.floor(levelIdx / 2);
-    // Ambil dari level sendiri
-    effectiveItems = [...level.items].slice(0, numItems);
-  } else {
-    // Level genap (idx ganjil → Level 2/4/6/8/...)
-    numItems = 3 + Math.floor((levelIdx - 1) / 2);
-    // Ambil dari next level, jika tidak ada pakai dari level sendiri
-    const nextLevelObj = gameLevels[levelIdx + 1] || level;
-    effectiveItems = [...nextLevelObj.items].slice(0, numItems);
-  }
+  // Ambil item dari level yang dipilih saja, tidak dari nextLevelObj
+  numItems = level.items.length;
+  effectiveItems = [...level.items];
 
   const [timeLeft, setTimeLeft] = useState(level.timeLimit);
   const [startTime] = useState(Date.now());

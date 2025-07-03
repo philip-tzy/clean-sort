@@ -643,7 +643,7 @@ export const gameLevels: Level[] = [
         name: 'Minyak Goreng Bekas',
         category: 'hazardous',
         image: '/images/minyak-goreng-bekas.webp',
-        educationalFact: 'Minyak goreng tidak boleh dibuang ke saluran air karena bisa menyumbat!'
+        educationalFact: 'Minyak goreng bekas termasuk limbah B3 karena jika dibuang sembarangan dapat mencemari air dan tanah serta mengganggu ekosistem.'
       },
       {
         id: 'kulit-bawang',
@@ -707,7 +707,7 @@ export const gameLevels: Level[] = [
         name: 'Botol Kaca',
         category: 'inorganic',
         image: '/images/botol-kaca.webp',
-        educationalFact: 'Kaca bisa didaur ulang tanpa batas tanpa kehilangan kualitas!'
+        educationalFact: 'Botol kaca termasuk limbah anorganik karena berasal dari bahan non-organik yang tidak bisa terurai secara alami dan dapat membahayakan jika tidak dikelola dengan aman.'
       },
       {
         id: 'cat-bekas',
@@ -891,11 +891,11 @@ export const gameLevels: Level[] = [
     timeLimit: 75,
     items: [
       {
-        id: 'hp-rusak',
-        name: 'HP Rusak',
-        category: 'hazardous',
-        image: '/images/hp-rusak.webp',
-        educationalFact: 'Perangkat elektronik mengandung logam mulia dan racun - perlu daur ulang e-waste khusus!'
+        id: 'sikat-gigi-bekas',
+        name: 'Sikat Gigi Bekas',
+        category: 'inorganic',
+        image: '/images/sikat-gigi-bekas.webp',
+        educationalFact: 'Sikat gigi terbuat dari plastik keras yang sulit terurai.'
       },
       {
         id: 'kabel-charger',
@@ -920,11 +920,11 @@ export const gameLevels: Level[] = [
     timeLimit: 70,
     items: [
       {
-        id: 'pecahan kaca',
-        name: 'Kaca Pecah',
-        category: 'hazardous',
-        image: '/images/pecahan-kaca.webp',
-        educationalFact: 'Kaca pecah berbahaya untuk ditangani dan perlu pembuangan hati-hati untuk melindungi pekerja!'
+        id: 'botol-parfum',
+        name: 'Botol Parfum',
+        category: 'inorganic',
+        image: '/images/botol-parfum.webp',
+        educationalFact: 'Botol parfum kaca/plastik bisa didaur ulang, tapi perlu dipisahkan dari sisa cairan.'
       },
       {
         id: 'obat-kadaluarsa',
@@ -934,11 +934,11 @@ export const gameLevels: Level[] = [
         educationalFact: 'Obat tidak boleh dibuang ke sampah biasa - kembalikan ke apotek untuk pembuangan aman!'
       },
       {
-        id: 'oli-bekas',
-        name: 'Oli Bekas',
-        category: 'hazardous',
-        image: '/images/oli-bekas.webp',
-        educationalFact: 'Satu liter oli bekas bisa mencemari hingga 1 juta liter air!'
+        id: 'serabut-kelapa',
+        name: 'Serabut Kelapa',
+        category: 'organic',
+        image: '/images/serabut-kelapa.webp',
+        educationalFact: 'Serabut kelapa bisa dijadikan media tanam dan pupuk organik jika dicacah.'
       }
     ]
   },
@@ -949,25 +949,25 @@ export const gameLevels: Level[] = [
     timeLimit: 65,
     items: [
       {
-        id: 'aki-motor',
-        name: 'Aki Motor',
-        category: 'hazardous',
-        image: '/images/aki-motor.webp',
-        educationalFact: 'Aki mengandung asam sulfat dan timbal yang sangat berbahaya bagi lingkungan!'
+        id: 'label-paket',
+        name: 'Label Pengiriman',
+        category: 'paper',
+        image: '/images/label-paket.webp',
+        educationalFact: 'Label paket dari kertas bisa dipisahkan dan diproses ulang jika bebas dari stiker plastik.'
       },
       {
-        id: 'printer-rusak',
-        name: 'Printer Rusak',
-        category: 'hazardous',
-        image: '/images/printer-rusak.webp',
-        educationalFact: 'Printer mengandung komponen elektronik dan tinta yang memerlukan daur ulang khusus!'
+        id: 'potongan-rumput',
+        name: 'Potongan Rumput',
+        category: 'organic',
+        image: '/images/potongan-rumput.webp',
+        educationalFact: 'Rumput yang dipotong dari taman bisa langsung dikomposkan.'
       },
       {
-        id: 'solder-bekas',
-        name: 'Solder Bekas',
-        category: 'hazardous',
-        image: '/images/solder-bekas.webp',
-        educationalFact: 'Solder mengandung timbal yang berbahaya dan harus ditangani sebagai limbah B3!'
+        id: 'batang-pisang',
+        name: 'Batang Pisang',
+        category: 'organic',
+        image: '/images/batang-pisang.webp',
+        educationalFact: 'Batang pisang dapat membusuk secara alami dan digunakan untuk pupuk.'
       },
       {
         id: 'cairan-rem',
@@ -992,18 +992,18 @@ export const gameLevels: Level[] = [
         educationalFact: 'Raksa adalah logam cair beracun yang sangat berbahaya bagi kesehatan!'
       },
       {
-        id: 'pestisida-cair',
-        name: 'Pestisida Bekas',
-        category: 'hazardous',
-        image: '/images/pestisida-cair.webp',
-        educationalFact: 'Kemasan pestisida tidak boleh dibuang sembarangan karena mengandung racun!'
+        id: 'raket-rusak',
+        name: 'Raket Rusak',
+        category: 'inorganic',
+        image: '/images/raket-rusak.webp',
+        educationalFact: 'Raket terbuat dari bahan sintetis seperti plastik dan aluminium — tidak mudah terurai.'
       },
       {
-        id: 'laptop-rusak',
-        name: 'Laptop Rusak',
-        category: 'hazardous',
-        image: '/images/laptop-rusak.webp',
-        educationalFact: 'Laptop mengandung logam berat dan bahan kimia berbahaya yang perlu e-waste khusus!'
+        id: 'kulit-salak',
+        name: 'Kulit Salak',
+        category: 'organic',
+        image: '/images/kulit-salak.webp',
+        educationalFact: 'Sisa buah seperti kulit salak termasuk bahan organik yang ramah lingkungan.'
       },
       {
         id: 'merkuri-bekas',
@@ -1028,11 +1028,11 @@ export const gameLevels: Level[] = [
         educationalFact: 'Tabung gas bertekanan harus dikembalikan ke distributor untuk penanganan aman!'
       },
       {
-        id: 'asbes-bekas',
-        name: 'Asbes Bekas',
-        category: 'hazardous',
-        image: '/images/asbes-bekas.webp',
-        educationalFact: 'Asbes menyebabkan kanker paru-paru dan harus ditangani oleh ahli limbah B3!'
+        id: 'botol-hand-sanitizer',
+        name: 'Botol Hand Sanitizer',
+        category: 'inorganic',
+        image: '/images/botol-hand-sanitizer.webp',
+        educationalFact: 'Botol plastik kecil bekas hand sanitizer bisa didaur ulang jika bersih.'
       },
       {
         id: 'solar-cell',
@@ -1049,11 +1049,11 @@ export const gameLevels: Level[] = [
         educationalFact: 'Termometer pecah bisa mengandung merkuri.'
       },
       {
-        id: 'kabel-listrik',
-        name: 'Kabel Listrik',
-        category: 'hazardous',
-        image: '/images/kabel-listrik.webp',
-        educationalFact: 'Kabel listrik bekas harus dibuang di tempat khusus.'
+        id: 'piring-melamin',
+        name: 'Piring Melamin',
+        category: 'inorganic',
+        image: '/images/piring-melamin.webp',
+        educationalFact: 'Melamin adalah plastik keras yang tidak mudah terurai dan berbahaya jika dibakar.'
       }
     ]
   },
@@ -1085,11 +1085,11 @@ export const gameLevels: Level[] = [
         educationalFact: 'Material radioaktif memerlukan penanganan khusus oleh Badan Tenaga Nuklir!'
       },
       {
-        id: 'hp-rusak',
-        name: 'HP Rusak',
-        category: 'hazardous',
-        image: '/images/hp-rusak.webp',
-        educationalFact: 'Perangkat elektronik mengandung logam mulia dan racun - perlu daur ulang e-waste khusus!'
+        id: 'wadah-kosmetik',
+        name: 'Wadah Kosmetik',
+        category: 'inorganic',
+        image: '/images/wadah-kosmetik.webp',
+        educationalFact: 'Botol kosmetik sering mengandung campuran plastik dan logam yang sulit dipilah.'
       },
       {
         id: 'oli-bekas',
@@ -1114,11 +1114,11 @@ export const gameLevels: Level[] = [
         educationalFact: 'Merkuri sangat beracun dan dapat merusak sistem saraf secara permanen!'
       },
       {
-        id: 'limbah-oli',
-        name: 'Limbah Oli',
-        category: 'hazardous',
-        image: '/images/limbah-oli.webp',
-        educationalFact: 'Limbah oli sangat mencemari lingkungan bila dibuang sembarangan.'
+        id: 'spons-cuci',
+        name: 'Spons Cuci Piring',
+        category: 'inorganic',
+        image: '/images/spons-cuci.webp',
+        educationalFact: 'Spons sintetis mengandung plastik mikro dan tidak bisa terurai.'
       },
       {
         id: 'tinta-printer',
@@ -1128,11 +1128,11 @@ export const gameLevels: Level[] = [
         educationalFact: 'Tinta printer mengandung bahan kimia berbahaya.'
       },
       {
-        id: 'kabel-charger',
-        name: 'Kabel Charger',
-        category: 'hazardous',
-        image: '/images/kabel-charger.webp',
-        educationalFact: 'Kabel mengandung tembaga dan plastik yang bisa didaur ulang, tapi perlu penanganan khusus!'
+        id: 'karpet-vinyl',
+        name: 'Potongan Karpet Vinyl',
+        category: 'inorganic',
+        image: '/images/karpet-vinyl.webp',
+        educationalFact: 'Karpet berbahan vinyl tidak bisa terurai dan butuh penanganan limbah khusus.'
       },
       {
         id: 'aki-motor',
@@ -1164,11 +1164,11 @@ export const gameLevels: Level[] = [
         educationalFact: 'Kabel listrik bekas harus dibuang di tempat khusus.'
       },
       {
-        id: 'lampu-pijar-rusak',
-        name: 'Lampu Pijar Rusak',
-        category: 'hazardous',
-        image: '/images/lampu-pijar-rusak.webp',
-        educationalFact: 'Lampu pijar mengandung logam dan gas yang memerlukan pembuangan khusus!'
+        id: 'headset-rusak',
+        name: 'Headset Rusak',
+        category: 'inorganic',
+        image: '/images/headset-rusak.webp',
+        educationalFact: 'Perangkat elektronik kecil seperti headset mengandung campuran plastik dan logam.'
       },
       {
         id: 'obat-kadaluarsa',
@@ -1178,18 +1178,18 @@ export const gameLevels: Level[] = [
         educationalFact: 'Obat kadaluarsa harus dibuang ke apotek.'
       },
       {
-        id: 'kemasan-detergen',
-        name: 'Kemasan Detergen',
-        category: 'hazardous',
-        image: '/images/kemasan-detergen.webp',
-        educationalFact: 'Wadah kimia harus kosong dan bersih sebelum didaur ulang untuk menghindari kontaminasi!'
+        id: 'origami-bekas',
+        name: 'Kertas Origami Bekas',
+        category: 'paper',
+        image: '/images/origami-bekas.webp',
+        educationalFact: 'Origami bekas bisa didaur ulang asalkan tidak dilapisi glitter atau plastik.'
       },
       {
-        id: 'printer-rusak',
-        name: 'Printer Rusak',
-        category: 'hazardous',
-        image: '/images/printer-rusak.webp',
-        educationalFact: 'Printer mengandung komponen elektronik dan tinta yang memerlukan daur ulang khusus!'
+        id: 'wadah-mie-instan',
+        name: 'Wadah Mie Instan',
+        category: 'inorganic',
+        image: '/images/wadah-mie-instan.webp',
+        educationalFact: 'Meskipun ringan, kemasan mie instan sangat sulit didaur ulang karena campuran bahan.'
       },
       {
         id: 'laptop-rusak',
@@ -1207,11 +1207,11 @@ export const gameLevels: Level[] = [
     timeLimit: 35,
     items: [
       {
-        id: 'termometer-pecah',
-        name: 'Termometer Pecah',
-        category: 'hazardous',
-        image: '/images/termometer-pecah.webp',
-        educationalFact: 'Termometer pecah bisa mengandung merkuri.'
+        id: 'ampas-tebu',
+        name: 'Ampas Tebu',
+        category: 'organic',
+        image: '/images/ampas-tebu.webp',
+        educationalFact: 'Sisa perasan tebu mengandung serat yang bisa diurai oleh mikroorganisme.'
       },
       {
         id: 'baterai-bekas',
@@ -1221,25 +1221,25 @@ export const gameLevels: Level[] = [
         educationalFact: 'Baterai bekas harus dibuang ke TPS3R.'
       },
       {
-        id: 'lampu-bekas',
-        name: 'Lampu Bekas',
-        category: 'hazardous',
-        image: '/images/lampu-bekas.webp',
-        educationalFact: 'Lampu bekas mengandung limbah B3.'
+        id: 'roti-bekas',
+        name: 'Sisa Roti',
+        category: 'organic',
+        image: '/images/roti-bekas`.webp',
+        educationalFact: 'Sisa roti basi termasuk limbah makanan yang mudah membusuk dan menjadi kompos.'
       },
       {
         id: 'pecahan kaca',
         name: 'Kaca Pecah',
-        category: 'hazardous',
+        category: 'inorganic',
         image: '/images/pecahan-kaca.webp',
-        educationalFact: 'Kaca pecah berbahaya untuk ditangani dan perlu pembuangan hati-hati untuk melindungi pekerja!'
+        educationalFact: 'Pecahan kaca termasuk limbah anorganik karena tidak dapat terurai secara alami dan berpotensi membahayakan makhluk hidup jika tidak dikelola dengan benar.'
       },
       {
-        id: 'solder-bekas',
-        name: 'Solder Bekas',
-        category: 'hazardous',
-        image: '/images/solder-bekas.webp',
-        educationalFact: 'Solder mengandung timbal yang berbahaya dan harus ditangani sebagai limbah B3!'
+        id: 'sisa-popcorn',
+        name: 'Sisa Popcorn',
+        category: 'organic',
+        image: '/images/sisa-popcorn.webp',
+        educationalFact: 'Makanan berbasis jagung seperti popcorn dapat terurai jika dibuang di komposter.'
       },
       {
         id: 'tabung-gas-bocor',
@@ -1249,11 +1249,11 @@ export const gameLevels: Level[] = [
         educationalFact: 'Tabung gas bertekanan harus dikembalikan ke distributor untuk penanganan aman!'
       },
       {
-        id: 'solar-cell',
-        name: 'Panel Surya',
-        category: 'hazardous',
-        image: '/images/solar-cell.webp',
-        educationalFact: 'Panel surya mengandung logam berat dan harus didaur ulang secara khusus!'
+        id: 'tiket-konser',
+        name: 'Tiket Konser',
+        category: 'paper',
+        image: '/images/tiket-konser.webp',
+        educationalFact: 'Kertas tiket yang tidak mengandung lapisan plastik dapat masuk kategori daur ulang.'
       }
     ]
   },
@@ -1271,11 +1271,11 @@ export const gameLevels: Level[] = [
         educationalFact: 'Pestisida sangat beracun dan membahayakan lingkungan.'
       },
       {
-        id: 'oli-motor',
-        name: 'Oli Motor Bekas',
-        category: 'hazardous',
-        image: '/images/oli-bekas.webp',
-        educationalFact: 'Oli bekas harus dikelola secara khusus.'
+        id: 'kertas-kupon',
+        name: 'Kupon Kertas',
+        category: 'paper',
+        image: '/images/kertas-kupon.webp',
+        educationalFact: 'Kertas promosi dan kupon bisa didaur ulang jika tidak dilapisi plastik glossy.'
       },
       {
         id: 'lem-kimia',
@@ -1285,11 +1285,11 @@ export const gameLevels: Level[] = [
         educationalFact: 'Lem kimia dapat mencemari saluran air.'
       },
       {
-        id: 'obat-kadaluarsa',
-        name: 'Obat Kadaluarsa',
-        category: 'hazardous',
-        image: '/images/obat-kadaluarsa.webp',
-        educationalFact: 'Obat tidak boleh dibuang ke sampah biasa - kembalikan ke apotek untuk pembuangan aman!'
+        id: 'jerami-kering',
+        name: 'Jerami Kering',
+        category: 'organic',
+        image: '/images/jerami-kering.webp',
+        educationalFact: 'Jerami sisa panen bisa dimanfaatkan sebagai pupuk hijau atau alas kandang.'
       },
       {
         id: 'termometer-raksa',
@@ -1299,11 +1299,11 @@ export const gameLevels: Level[] = [
         educationalFact: 'Raksa adalah logam cair beracun yang sangat berbahaya bagi kesehatan!'
       },
       {
-        id: 'asbes-bekas',
-        name: 'Asbes Bekas',
-        category: 'hazardous',
-        image: '/images/asbes-bekas.webp',
-        educationalFact: 'Asbes menyebabkan kanker paru-paru dan harus ditangani oleh ahli limbah B3!'
+        id: 'buku-bekas',
+        name: 'Buku Agenda Bekas',
+        category: 'paper',
+        image: '/images/buku-bekas.webp',
+        educationalFact: 'Buku agenda bisa dipilah dari jilidnya dan didaur ulang menjadi bubur kertas.'
       },
       {
         id: 'cairan-rem',
