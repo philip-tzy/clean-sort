@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { binCategories } from '@/data/gameData';
 
@@ -21,14 +20,20 @@ const TrashBin: React.FC<TrashBinProps> = ({
   const bin = binCategories.find(b => b.id === binId);
   if (!bin) return null;
 
+  const [isDragOver, setIsDragOver] = useState(false);
+
   return (
     <Card
-      className={`${bin.color} text-white min-h-32 relative transition-all duration-300 hover:scale-105 cursor-pointer select-none`}
-      onDragOver={e => e.preventDefault()}
+      className={`${bin.color} text-white min-h-32 relative transition-all duration-300 hover:scale-105 cursor-pointer select-none
+        ${isDragOver ? 'ring-4  scale-110 shadow-2xl z-20' : ''}`}
+      onDragOver={e => { e.preventDefault(); setIsDragOver(true); }}
+      onDragLeave={e => { setIsDragOver(false); }}
       onDrop={e => {
         e.preventDefault();
+        setIsDragOver(false);
         onDrop(bin.id);
       }}
+      onMouseLeave={() => setIsDragOver(false)}
       onTouchEnd={() => {
         onBinTouch(bin.id);
       }}

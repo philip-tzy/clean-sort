@@ -53,7 +53,7 @@ const Auth = () => {
           </div>
           <div className="flex justify-center mb-4">
             <img 
-              src="/lovable-uploads/d35e0cdb-4d93-4d20-9379-bb4310fc71f5.png" 
+              src="/cleansort-logo.png" 
               alt="CleanSort Logo" 
               className="w-16 h-16"
             />

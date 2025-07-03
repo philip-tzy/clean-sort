@@ -108,33 +108,55 @@ const Index = () => {
   const saveScoreToDatabase = async (score: number, completionTime: number, stars: number) => {
     if (!user) return;
 
-    try {
-      const { error } = await supabase
-        .from('game_scores')
-        .insert({
-          user_id: user.id,
-          level_id: currentLevel,
-          score: score,
-          completion_time: completionTime,
-          stars: stars
-        });
+    // Cek apakah sudah ada skor untuk user & level ini
+    const { data: existing, error: fetchError } = await supabase
+      .from('game_scores')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('level_id', currentLevel)
+      .maybeSingle();
 
-      if (error) {
+    if (fetchError) {
+      console.error('Error checking existing score:', fetchError);
+      return;
+    }
+
+    // Hanya insert jika belum ada skor (attempt pertama)
+    if (!existing) {
+      try {
+        const { error } = await supabase
+          .from('game_scores')
+          .insert({
+            user_id: user.id,
+            level_id: currentLevel,
+            score: score,
+            completion_time: completionTime,
+            stars: stars
+          });
+
+        if (error) {
+          console.error('Error saving score:', error);
+        }
+      } catch (error) {
         console.error('Error saving score:', error);
       }
-    } catch (error) {
-      console.error('Error saving score:', error);
     }
   };
 
   // Cek skor: harus >= 50% dari skor max (diset ke 100 poin)
-  const endGame = (score: number, errors: Array<{item: string, explanation: string}>, completionTime: number) => {
-    // Ubah maxScore jadi 100 secara global
-    const maxScore = 100;
-    const canProceed = score >= Math.ceil(maxScore * 0.5);
-
-    // Hitung bintang untuk level ini
-    const stars = getStarsByScore(score, maxScore);
+  const endGame = (score: number, errors: Array<{item: string, explanation: string}>, completionTime: number, correctCount: number, totalCount: number) => {
+    // Hitung bintang berdasarkan jumlah item benar
+    let stars = 0;
+    if (totalCount > 0) {
+      if (correctCount === totalCount) {
+        stars = 3;
+      } else if (correctCount >= Math.ceil((2/3) * totalCount)) {
+        stars = 2;
+      } else if (correctCount >= Math.ceil((1/3) * totalCount)) {
+        stars = 1;
+      }
+    }
+    const canProceed = stars >= 1;
 
     // Save to database if user is logged in
     if (user) {

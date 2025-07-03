@@ -14,7 +14,7 @@ import { useDragTouchHandlers } from './useDragTouchHandlers';
 
 interface GameScreenProps {
   levelId: string;
-  onGameEnd: (score: number, errors: Array<{item: string, explanation: string}>, completionTime: number) => void;
+  onGameEnd: (score: number, errors: Array<{item: string, explanation: string}>, completionTime: number, completedItems: number, totalItems: number) => void;
   onBackToMenu: () => void;
 }
 
@@ -52,10 +52,19 @@ const GameScreen: React.FC<GameScreenProps> = ({ levelId, onGameEnd, onBackToMen
   const [incorrectItems, setIncorrectItems] = useState<Set<string>>(new Set());
   const [gameStarted, setGameStarted] = useState(false);
 
-  // Skor dinamis agar total benar semua dapat 100
-  const pointsPerCorrect = effectiveItems.length > 0 ? Math.ceil(100 / effectiveItems.length) : 0;
-  // Penalti salah: setengah poin benar
-  const penaltyWrong = Math.ceil(pointsPerCorrect / 2);
+  // Skor dinamis sesuai tingkat kesulitan
+  let pointsPerCorrect = 0;
+  let penaltyWrong = 0;
+  if (level.difficulty === 'easy') {
+    pointsPerCorrect = 4;
+    penaltyWrong = 1;
+  } else if (level.difficulty === 'medium') {
+    pointsPerCorrect = 7;
+    penaltyWrong = 2;
+  } else if (level.difficulty === 'hard') {
+    pointsPerCorrect = 10;
+    penaltyWrong = 3;
+  }
 
   useEffect(() => {
     // Randomkan urutan agar tidak selalu sama
@@ -83,13 +92,29 @@ const GameScreen: React.FC<GameScreenProps> = ({ levelId, onGameEnd, onBackToMen
       playGameComplete();
       stopBackgroundMusic(); // Stop music when game ends
       const completionTime = Math.floor((Date.now() - startTime) / 1000);
-      onGameEnd(score, errors, completionTime);
+      // --- Faktor waktu ---
+      let timeFactor = 1;
+      if (completionTime < 0.25 * level.timeLimit) {
+        timeFactor = 3;
+      } else if (completionTime < 0.75 * level.timeLimit) {
+        timeFactor = 2;
+      }
+      const finalScore = score * timeFactor;
+      onGameEnd(finalScore, errors, completionTime, completedItems.size, currentItems.length);
       return;
     }
     if (timeLeft <= 0) {
       stopBackgroundMusic(); // Stop music when time runs out
       const completionTime = Math.floor((Date.now() - startTime) / 1000);
-      onGameEnd(score, errors, completionTime);
+      // --- Faktor waktu ---
+      let timeFactor = 1;
+      if (completionTime < 0.25 * level.timeLimit) {
+        timeFactor = 3;
+      } else if (completionTime < 0.75 * level.timeLimit) {
+        timeFactor = 2;
+      }
+      const finalScore = score * timeFactor;
+      onGameEnd(finalScore, errors, completionTime, completedItems.size, currentItems.length);
       return;
     }
     
@@ -142,26 +167,17 @@ const GameScreen: React.FC<GameScreenProps> = ({ levelId, onGameEnd, onBackToMen
     const isCorrect = usedItem.category === category;
     if (isCorrect) {
       playCorrectDrop();
-      setScore(prev => {
-        const newScore = prev + pointsPerCorrect;
-        return newScore > 100 ? 100 : newScore;
-      });
+      setScore(prev => prev + pointsPerCorrect);
       setCompletedItems(prev => new Set([...prev, usedItem.id]));
-      toast.success(`Benar! ${usedItem.name} masuk ke sampah ${getBinName(category)}! 🎉`, {
-        description: usedItem.educationalFact
-      });
     } else {
       playIncorrectDrop();
-      setScore(prev => Math.max(0, prev - penaltyWrong));
+      setScore(prev => prev - penaltyWrong);
       setIncorrectItems(prev => new Set([...prev, usedItem.id]));
       const newError = {
         item: usedItem.name,
         explanation: `${usedItem.name} seharusnya masuk ke tempat sampah ${getBinName(usedItem.category)}. ${usedItem.educationalFact}`
       };
       setErrors(prev => [...prev, newError]);
-      toast.error(`Ups! ${usedItem.name} tidak cocok di sini!`, {
-        description: `Seharusnya masuk ke tempat sampah ${getBinName(usedItem.category)}`
-      });
     }
     setDraggedItem(null);
   };
@@ -224,7 +240,9 @@ const GameScreen: React.FC<GameScreenProps> = ({ levelId, onGameEnd, onBackToMen
           ))}
         </div>
         {/* Trash Items */}
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
+        <div
+          className="grid gap-3 grid-cols-4 w-full max-w-full items-center justify-center"
+        >
           {currentItems.map((item) => {
             const isCompleted = completedItems.has(item.id);
             const isIncorrect = incorrectItems.has(item.id);
@@ -251,7 +269,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ levelId, onGameEnd, onBackToMen
             </p>
             <p className="text-sm text-gray-600 mt-2">
               ✅ Jawaban benar: +{pointsPerCorrect} poin | ❌ Jawaban salah: -{penaltyWrong} poin <br />
-              <span className="text-xs block mt-1">(Poin maksimal setiap sesi: 100)</span>
+              <span className="text-xs block mt-1">(Tidak ada nilai maksimal. Skor akhir dikali faktor waktu!)</span>
             </p>
           </CardContent>
         </Card>
