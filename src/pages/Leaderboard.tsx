@@ -56,7 +56,7 @@ const Leaderboard = () => {
           score,
           completion_time,
           stars,
-          profiles!fk_game_scores_user_id(username)
+          profiles!fk_game_scores_user_id(username, is_admin)
         `);
 
       if (error) throw error;
@@ -64,7 +64,7 @@ const Leaderboard = () => {
       console.log('Leaderboard data:', data);
 
       // Group by user and calculate stats
-      const userStats: { [key: string]: LeaderboardEntry } = {};
+      const userStats: { [key: string]: LeaderboardEntry & { is_admin?: boolean } } = {};
 
       data?.forEach((score: any) => {
         const userId = score.user_id;
@@ -75,7 +75,8 @@ const Leaderboard = () => {
             total_score: 0,
             best_time: Infinity,
             total_stars: 0,
-            games_played: 0
+            games_played: 0,
+            is_admin: score.profiles?.is_admin || false
           };
         }
 
@@ -87,7 +88,7 @@ const Leaderboard = () => {
 
       // Convert to array and sort by total score (desc), then by best time (asc)
       const sortedLeaderboard = Object.values(userStats)
-        .filter(user => user.games_played > 0)
+        .filter(user => user.games_played > 0 && !user.is_admin)
         .sort((a, b) => {
           if (b.total_score !== a.total_score) {
             return b.total_score - a.total_score;

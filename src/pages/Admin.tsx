@@ -207,9 +207,25 @@ const Admin = () => {
         <Card className="bg-white/90 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-xl">👥 Manajemen Pengguna</CardTitle>
-            <p className="text-sm text-gray-600">
-              Kelola progress dan data pengguna game
-            </p>
+            <p className="text-sm text-gray-600">Kelola progress dan data pengguna game</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button size="sm" variant="destructive" onClick={async () => {
+                if (!window.confirm('Apakah Anda yakin ingin mereset seluruh progres semua user? Tindakan ini tidak dapat dibatalkan.')) return;
+                setLoading(true);
+                try {
+                  await Promise.all(users.map(async (u) => {
+                    await supabase.rpc('delete_user_progress', { target_user_id: u.id });
+                  }));
+                  toast.success('Progres semua user berhasil direset');
+                  fetchUsers();
+                } catch (err) {
+                  toast.error('Gagal reset progres semua user');
+                }
+                setLoading(false);
+              }} disabled={loading}>
+                {loading ? 'Memproses...' : 'Reset Progres Semua User'}
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             {users.length === 0 ? (
